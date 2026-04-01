@@ -1,4 +1,4 @@
-const API = 'http://127.0.0.1:8000';
+const API = 'https://screeniq-api.onrender.com'
 
 const REC_COLORS = {
   'Strong Yes': '#4ade80',
