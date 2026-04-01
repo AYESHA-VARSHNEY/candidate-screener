@@ -18,9 +18,33 @@
 </header>
 
 <main class="main">
+    <!-- LANDING VIEW -->
+    <div id="landing-view" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;gap:2rem;">
+        <div>
+            <h1 style="font-size:42px;font-weight:800;margin:0">Screen<span style="color:#7c6aff">IQ</span></h1>
+            <p style="color:var(--muted);margin-top:8px;font-family:'DM Mono',monospace;font-size:13px">AI-Powered Candidate Screening</p>
+        </div>
+        <p style="color:var(--muted);font-size:15px;max-width:400px">Who are you today?</p>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center">
+            
+            <div onclick="setMode('recruiter')" style="cursor:pointer;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;width:200px;transition:border-color 0.2s" onmouseover="this.style.borderColor='#7c6aff'" onmouseout="this.style.borderColor='rgba(255,255,255,0.07)'">
+                <div style="font-size:36px;margin-bottom:12px">🏢</div>
+                <div style="font-weight:700;font-size:16px;margin-bottom:8px">Recruiter</div>
+                <div style="color:var(--muted);font-size:12px;line-height:1.5">Screen multiple candidates against a job description</div>
+            </div>
 
-  <!-- UPLOAD VIEW -->
-  <div id="upload-view" class="upload-grid">
+            <div onclick="setMode('candidate')" style="cursor:pointer;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;width:200px;transition:border-color 0.2s" onmouseover="this.style.borderColor='#4ade80'" onmouseout="this.style.borderColor='rgba(255,255,255,0.07)'">
+                <div style="font-size:36px;margin-bottom:12px">👤</div>
+                <div style="font-weight:700;font-size:16px;margin-bottom:8px">Candidate</div>
+                <div style="color:var(--muted);font-size:12px;line-height:1.5">Check how well your resume matches a job</div>
+            </div>
+        </div>
+    </div>
+ 
+
+
+  <!-- RECRUITER UPLOAD VIEW -->
+  <div id="upload-view" class="upload-grid hidden">
 
     <!-- Left: JD -->
     <div class="panel">

@@ -21,7 +21,42 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('screen-btn').addEventListener('click', handleScreen)
   document.getElementById('back-btn').addEventListener('click', showUploadView)
   document.getElementById('rescore-btn').addEventListener('click', handleScreen)
+  document.getElementById('c-file-input').addEventListener('change', handleCandidateUpload)
+  document.getElementById('c-check-btn').addEventListener('click', handleCandidateCheck)
 })
+
+// ── Mode Selection ────────────────────────────────────────────────────────────
+
+function setMode(mode) {
+    state.mode = mode
+    hide('landing-view')
+    show('back-btn')
+  
+    if (mode === 'recruiter') {
+      show('upload-view')
+    } else {
+      show('candidate-view')
+    }
+  }
+  
+  function goBack() {
+    hide('upload-view')
+    hide('results-view')
+    hide('candidate-view')
+    hide('candidate-result-view')
+    hide('back-btn')
+    hide('rescore-btn')
+    show('landing-view')
+    state.result = null
+    state.candidateResume = null
+    state.resumes = []
+    document.getElementById('file-list').innerHTML = ''
+    document.getElementById('c-file-list').innerHTML = ''
+    document.getElementById('resume-count').textContent = '0'
+  }
+  
+  function show(id) { document.getElementById(id)?.classList.remove('hidden') }
+  function hide(id) { document.getElementById(id)?.classList.add('hidden') }
 
 // ── Sliders ───────────────────────────────────────────────────────────────────
 
