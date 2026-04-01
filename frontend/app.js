@@ -145,6 +145,7 @@ async function rerankLive() {
     state.result.candidates = data.candidates
     renderCards()
     renderSummary()
+    syncResultSliders()
   } catch (e) { console.error(e) }
 }
 
