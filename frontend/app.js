@@ -276,24 +276,24 @@ async function handleCandidateCheck() {
   
     try {
         const res = await fetch(`${API}/api/screen`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          job_description: jd,
-          resumes: [candidateResume],
-          weights: state.weights,
-          api_key: USER_API_KEY
-        })
-      });
-  
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || 'Analysis failed');
-      showCandidateResult(data.candidates[0]);
-    } catch (err) {
-      errEl.textContent = err.message || 'Something went wrong.'
-    } finally {
-      btn.disabled = false
-      btn.innerHTML = '🎯 Check My Fit'
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                job_description: jd,
+                resumes: [candidateResume],
+                weights: state.weights,
+                api_key: USER_API_KEY
+            })
+        });
+        
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || 'Analysis failed');
+        showCandidateResult(data.candidates[0]);
+    }   catch (err) {
+        errEl.textContent = err.message || 'Something went wrong.'
+    }   finally {
+        btn.disabled = false
+        btn.innerHTML = '🎯 Check My Fit'
     }
   }
 
