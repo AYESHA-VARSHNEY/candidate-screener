@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScreenIQ — AI Candidate Screener</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">Screen<span>IQ</span></div>
+    <div class="tagline">AI-Powered Candidate Screening</div>
+  </div>
+  <button class="btn-secondary hidden" id="back-btn">← New Screening</button>
+  <button class="btn-secondary hidden" id="rescore-btn">↻ Re-score</button>
+</header>
+
+<main class="main">
+    <!-- API KEY VIEW — SABSE UPAR DAALO, LANDING VIEW SE PEHLE -->
+    <div id="api-key-view" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;gap:1rem;">
+        <h2 style="font-size:24px;font-weight:800">Enter API Key</h2>
+        <p style="color:var(--muted);font-size:13px">Stored only in your browser session — never sent anywhere else</p>
+        <input type="password" id="api-key-input" placeholder="sk-ant-api03-..."
+            style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px;color:var(--text);width:350px;font-family:'DM Mono',monospace;font-size:13px" />
+        <button onclick="saveApiKey()" class="btn-primary" style="width:350px">Continue →</button>
+    </div>
+   
+    <!-- LANDING VIEW -->
+    <div id="landing-view" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;gap:2rem;">
+        <div>
+            <h1 style="font-size:42px;font-weight:800;margin:0">Screen<span style="color:#7c6aff">IQ</span></h1>
+            <p style="color:var(--muted);margin-top:8px;font-family:'DM Mono',monospace;font-size:13px">AI-Powered Candidate Screening</p>
+        </div>
+        <p style="color:var(--muted);font-size:15px;max-width:400px">Who are you today?</p>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center">
+            
+            <div onclick="setMode('recruiter')" style="cursor:pointer;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;width:200px;transition:border-color 0.2s" onmouseover="this.style.borderColor='#7c6aff'" onmouseout="this.style.borderColor='rgba(255,255,255,0.07)'">
+                <div style="font-size:36px;margin-bottom:12px">🏢</div>
+                <div style="font-weight:700;font-size:16px;margin-bottom:8px">Recruiter</div>
+                <div style="color:var(--muted);font-size:12px;line-height:1.5">Screen multiple candidates against a job description</div>
+            </div>
+
+            <div onclick="setMode('candidate')" style="cursor:pointer;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;width:200px;transition:border-color 0.2s" onmouseover="this.style.borderColor='#4ade80'" onmouseout="this.style.borderColor='rgba(255,255,255,0.07)'">
+                <div style="font-size:36px;margin-bottom:12px">👤</div>
+                <div style="font-weight:700;font-size:16px;margin-bottom:8px">Candidate</div>
+                <div style="color:var(--muted);font-size:12px;line-height:1.5">Check how well your resume matches a job</div>
+            </div>
+        </div>
+    </div>
+ 
+
+
+  <!-- RECRUITER UPLOAD VIEW -->
+  <div id="upload-view" class="upload-grid hidden">
+
+    <!-- Left: JD -->
+    <div class="panel">
+      <h2>Job Description</h2>
+      <textarea id="jd-input" placeholder="Paste the job description here...">Senior Software Engineer — Backend
+
+We are looking for a Senior Backend Engineer to join our platform team.
+
+Requirements:
+- 5+ years of software engineering experience
+- Strong proficiency in Python or Node.js
+- Experience with distributed systems, microservices
+- AWS, GCP, or Azure cloud experience
+- PostgreSQL and Redis
+- Mentorship and leadership skills
+- BS/MS in Computer Science or equivalent</textarea>
+    </div>
+
+    <!-- Right: Resumes + Weights + CTA -->
+    <div class="right-panels">
+
+      <div class="panel">
+        <h2>Resumes (<span id="resume-count">0</span> uploaded)</h2>
+        <label class="upload-zone">
+          <input type="file" id="file-input" multiple accept=".txt,.pdf,.md" style="display:none" />
+          <div class="upload-icon">📄</div>
+          Drop .txt / .pdf resumes here or click to browse
+        </label>
+        <div class="file-list" id="file-list"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Scoring Weights</h2>
+        <div class="slider-row">
+          <div class="slider-label">
+            <span style="color:#7c6aff">Experience</span>
+            <span class="slider-val mono" id="val-experience">40</span>
+          </div>
+          <input type="range" id="slider-experience" min="0" max="100" step="5" style="accent-color:#7c6aff" />
+        </div>
+        <div class="slider-row">
+          <div class="slider-label">
+            <span style="color:#4ade80">Skills Match</span>
+            <span class="slider-val mono" id="val-skills">35</span>
+          </div>
+          <input type="range" id="slider-skills" min="0" max="100" step="5" style="accent-color:#4ade80" />
+        </div>
+        <div class="slider-row">
+          <div class="slider-label">
+            <span style="color:#facc15">Education</span>
+            <span class="slider-val mono" id="val-education">15</span>
+          </div>
+          <input type="range" id="slider-education" min="0" max="100" step="5" style="accent-color:#facc15" />
+        </div>
+        <div class="slider-row">
+          <div class="slider-label">
+            <span style="color:#ff6a6a">Leadership</span>
+            <span class="slider-val mono" id="val-leadership">10</span>
+          </div>
+          <input type="range" id="slider-leadership" min="0" max="100" step="5" style="accent-color:#ff6a6a" />
+        </div>
+      </div>
+
+      <p class="error-msg" id="error-msg"></p>
+      <button class="btn-primary" id="screen-btn">⚡ Screen Candidates</button>
+    </div>
+  </div>
+
+  <!-- RESULTS VIEW -->
+  <div id="results-view" class="results-grid hidden">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div style="margin-bottom:20px">
+        <div class="stat-label">SCREENED</div>
+        <div class="stat-big" id="total-count">0 candidates</div>
+      </div>
+
+      <div class="rec-grid" id="rec-summary"></div>
+
+      <h3 style="font-size:13px;font-weight:700;margin-bottom:12px">Adjust Weights</h3>
+
+      <div class="slider-row">
+        <div class="slider-label">
+          <span style="color:#7c6aff">Experience</span>
+          <span class="slider-val mono" id="rval-experience">40</span>
+        </div>
+        <input type="range" id="rslider-experience" min="0" max="100" step="5" style="accent-color:#7c6aff" />
+      </div>
+      <div class="slider-row">
+        <div class="slider-label">
+          <span style="color:#4ade80">Skills</span>
+          <span class="slider-val mono" id="rval-skills">35</span>
+        </div>
+        <input type="range" id="rslider-skills" min="0" max="100" step="5" style="accent-color:#4ade80" />
+      </div>
+      <div class="slider-row">
+        <div class="slider-label">
+          <span style="color:#facc15">Education</span>
+          <span class="slider-val mono" id="rval-education">15</span>
+        </div>
+        <input type="range" id="rslider-education" min="0" max="100" step="5" style="accent-color:#facc15" />
+      </div>
+      <div class="slider-row">
+        <div class="slider-label">
+          <span style="color:#ff6a6a">Leadership</span>
+          <span class="slider-val mono" id="rval-leadership">10</span>
+        </div>
+        <input type="range" id="rslider-leadership" min="0" max="100" step="5" style="accent-color:#ff6a6a" />
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="cards-list" id="cards-list"></div>
+  </div>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
+
