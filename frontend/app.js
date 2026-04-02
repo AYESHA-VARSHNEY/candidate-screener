@@ -190,17 +190,17 @@ function removeFile(i) {
 // ── Screen ────────────────────────────────────────────────────────────────────
 
 async function handleScreen() {
-  const jd = document.getElementById('jd-input').value.trim()
-  const errEl = document.getElementById('error-msg')
-  errEl.textContent = ''
+  const jd = document.getElementById('jd-input').value.trim();
+  const errEl = document.getElementById('error-msg');
+  errEl.textContent = '';
 
-  if (!jd) { errEl.textContent = 'Please enter a job description.'; return }
-  if (!state.resumes.length) { errEl.textContent = 'Please upload at least one resume.'; return }
+  if (!jd) { errEl.textContent = 'Please enter a job description.'; return; }
+  if (!state.resumes.length) { errEl.textContent = 'Please upload at least one resume.'; return; }
+  if (!USER_API_KEY) { errEl.textContent = 'Please enter your Groq API key first.'; return; }
 
-  const btn = document.getElementById('screen-btn')
-  btn.disabled = true
-  btn.classList.add('loading')
-  btn.innerHTML = '<span class="spinner"></span> Screening candidates...'
+  const btn = document.getElementById('screen-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Screening candidates...';
 
   try {
     const prompt = `You are an expert recruiter. Analyze these resumes against the job description.
@@ -235,31 +235,27 @@ async function handleScreen() {
 Recommendation must be one of: "Strong Yes", "Yes", "Maybe", "No".
 Return ONLY valid JSON. No markdown. No text outside JSON.`
 
-const res = await fetch('https://api.anthropic.com/v1/messages', {
+const res = await fetch('${API}/api/screen`', {
   method: 'POST',
   headers: {
-    'Content-Type': 'application/json',
-    'x-api-key': USER_API_KEY,
-    'anthropic-version': '2023-06-01',
-    'anthropic-dangerous-direct-browser-access': 'true'
+    'Content-Type': 'application/json'
   },
   body: JSON.stringify({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 4000,
-    messages: [{ role: 'user', content: prompt }]
+    job_description: jd,
+    resumes: state.resumes,
+    weights: state.weights,
+    api_key: USER_API_KEY // User ki key backend ko jayegi
   })
 })
 
-const apiData = await res.json()
-if (!res.ok) throw new Error(apiData.error?.message || 'API error')
-const raw = apiData.content[0].text.trim().replace(/```json|```/g, '').trim()
-const data = JSON.parse(raw)
-    state.result = data
-    showResultsView()
-  } catch (err) {
-    errEl.textContent = err.message
-  } finally {
-    btn.disabled = false
+const data= await res.json()
+if (!res.ok) throw new Error(data.detail || 'Screening failed');
+state.result = data;
+showResultsView();
+} catch (err) {
+   errEl.textContent = err.message;
+} finally {
+    btn.disabled = false;
     btn.classList.remove('loading')
     btn.innerHTML = '⚡ Screen Candidates'
   }

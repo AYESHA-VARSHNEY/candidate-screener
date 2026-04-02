@@ -15,6 +15,7 @@ class ScreenRequest(BaseModel):
     job_description: str
     resumes: List[ResumeInput]
     weights: WeightConfig
+    api_key: str  
 
 class ScoreBreakdown(BaseModel):
     experience: int
@@ -45,4 +46,3 @@ class ScreeningResult(BaseModel):
     candidates: List[ScoredCandidate]
     job_title: str
     screened_at: str
-    
