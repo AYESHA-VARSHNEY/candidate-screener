@@ -172,40 +172,39 @@ Requirements:
       </div>
     </div>
 
-    <!-- CANDIDATE VIEW -->
-<div id="candidate-view" class="upload-grid hidden">
-    <div class="panel">
-      <h2>Job Description</h2>
-      <label style="display:inline-flex;align-items:center;gap:6px;margin-bottom:8px;cursor:pointer;color:var(--muted);font-size:12px;border:1px solid var(--border);padding:4px 10px;border-radius:6px">
-        <input type="file" id="c-jd-file-input" accept=".pdf,.txt" style="display:none" />
-        📎 Upload JD file (.pdf / .txt)
-      </label>
-      <textarea id="c-jd-input" placeholder="Paste the job description you want to apply for..."></textarea>
-    </div>
-    <div class="right-panels">
-      <div class="panel">
-        <h2>Your Resume</h2>
-        <label class="upload-zone">
-          <input type="file" id="c-file-input" accept=".txt,.pdf" style="display:none" />
-          <div class="upload-icon">📄</div>
-          Upload your resume (.pdf or .txt)
-        </label>
-        <div class="file-list" id="c-file-list"></div>
-      </div>
-      <p class="error-msg" id="c-error-msg"></p>
-      <button class="btn-primary" id="c-check-btn" style="background:#4ade80;color:#000">🎯 Check My Fit</button>
-    </div>
-  </div>
-  
-  <!-- CANDIDATE RESULT VIEW -->
-  <div id="candidate-result-view" class="hidden" style="max-width:700px;margin:0 auto">
-    <div class="candidate-card" id="c-result-card"></div>
-  </div>
-
-
     <!-- Cards -->
     <div class="cards-list" id="cards-list"></div>
   </div>
+
+    <!-- CANDIDATE VIEW -->
+    <div id="candidate-view" class="upload-grid hidden">
+        <div class="panel">
+    <h2>Job Description</h2>
+       <label style="display:inline-flex;align-items:center;gap:6px;margin-bottom:8px;cursor:pointer;color:var(--muted);font-size:12px;border:1px solid var(--border);padding:4px 10px;border-radius:6px">
+         <input type="file" id="c-jd-file-input" accept=".pdf,.txt" style="display:none" />
+         📎 Upload JD file (.pdf / .txt)
+       </label>
+       <textarea id="c-jd-input" placeholder="Paste the job description you want to apply for..."></textarea>
+      </div>
+     <div class="right-panels">
+       <div class="panel">
+         <h2>Your Resume</h2>
+         <label class="upload-zone">
+           <input type="file" id="c-file-input" accept=".txt,.pdf" style="display:none" />
+           <div class="upload-icon">📄</div>
+           Upload your resume (.pdf or .txt)
+         </label>
+         <div class="file-list" id="c-file-list"></div>
+       </div>
+       <p class="error-msg" id="c-error-msg"></p>
+       <button class="btn-primary" id="c-check-btn" style="background:#4ade80;color:#000">🎯 Check My Fit</button>
+     </div>
+   </div>
+   
+   <!-- CANDIDATE RESULT VIEW -->
+    <div id="candidate-result-view" class="hidden" style="max-width:700px;margin:0 auto">
+     <div class="candidate-card" id="c-result-card"></div>
+   </div>
 
 </main>
 

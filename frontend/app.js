@@ -60,25 +60,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
   // Candidate JD file upload
-  document.getElementById('c-jd-file-input')?.addEventListener('change', async (e) => {
-    const file = e.target.files[0]
-    if (!file) return
+  document.addEventListener('change', async (e) => {
+    if (e.target && e.target.id === 'c-jd-file-input') {
+        const file = e.target.files[0]
+        if (!file) return
   
-    if (file.name.endsWith('.pdf')) {
-      const formData = new FormData()
-      formData.append('file', file)
+        if (file.name.endsWith('.pdf')) {
+            const formData = new FormData()
+            formData.append('file', file)
   
-      const res = await fetch(`${API}/api/parse-pdf`, {
-        method: 'POST',
-        body: formData
-      })
-  
-      const data = await res.json()
-      document.getElementById('c-jd-input').value = data.text
-    } else {
-      document.getElementById('c-jd-input').value = await file.text()
+            const res = await fetch(`${API}/api/parse-pdf`, {
+                 method: 'POST',
+                 body: formData
+            })
+            const data = await res.json()
+            document.getElementById('c-jd-input').value = data.text
+        } else {
+            document.getElementById('c-jd-input').value = await file.text()
+        }
     }
-})
+  })
 })
 
 
@@ -304,6 +305,7 @@ function showResultsView() {
   syncResultSliders()
 }
 
+
 // ── Render Summary ────────────────────────────────────────────────────────────
 
 function renderSummary() {
@@ -393,6 +395,144 @@ function buildCard(c, rank) {
       </div>
 
       ${biasHtml}
+    </div>   
+  `
+}
+// ── Candidate Upload ──────────────────────────────────────────────────────────
+
+let candidateResume = null
+
+async function handleCandidateUpload(e) {
+  const file = e.target.files[0]
+  if (!file) return
+  if (file.name.endsWith('.pdf')) {
+    const formData = new FormData()
+    formData.append('file', file)
+    const res = await fetch(`${API}/api/parse-pdf`, { method: 'POST', body: formData })
+    const data = await res.json()
+    candidateResume = { name: data.name, text: data.text }
+  } else {
+    candidateResume = { name: file.name, text: await file.text() }
+  }
+  document.getElementById('c-file-list').innerHTML = `
+    <div class="file-item">
+      <span>${candidateResume.name}</span>
+      <button class="remove-btn" onclick="candidateResume=null;document.getElementById('c-file-list').innerHTML=''">×</button>
+    </div>
+  `
+}
+
+async function handleCandidateCheck() {
+  const jd = document.getElementById('c-jd-input').value.trim()
+  const errEl = document.getElementById('c-error-msg')
+  errEl.textContent = ''
+
+  if (!jd) { errEl.textContent = 'Please paste a job description.'; return }
+  if (!candidateResume) { errEl.textContent = 'Please upload your resume.'; return }
+
+  const btn = document.getElementById('c-check-btn')
+  btn.disabled = true
+  btn.innerHTML = '<span class="spinner"></span> Checking your fit...'
+
+  try {
+    const prompt = `You are an expert recruiter. Analyze this resume against the job description.
+
+JOB DESCRIPTION:
+${jd}
+
+RESUME:
+${candidateResume.text}
+
+Return ONLY valid JSON:
+{
+  "name": "candidate name",
+  "overall_score": 75,
+  "breakdown": { "experience": 60, "skills": 80, "education": 85, "leadership": 70 },
+  "recommendation": "Yes",
+  "summary": "2-3 sentence summary",
+  "top_skills": ["skill1","skill2","skill3"],
+  "strengths": ["strength1","strength2","strength3"],
+  "gaps": ["gap1","gap2"],
+  "years_experience": 2,
+  "education": "B.Tech AIML",
+  "bias_flags": []
+}`
+
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': USER_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    })
+
+    const apiData = await res.json()
+    if (!res.ok) throw new Error(apiData.error?.message || 'API error')
+    const raw = apiData.content[0].text.trim().replace(/```json|```/g, '').trim()
+    const c = JSON.parse(raw)
+    showCandidateResult(c)
+  } catch (err) {
+    errEl.textContent = err.message || 'Something went wrong.'
+  } finally {
+    btn.disabled = false
+    btn.innerHTML = '🎯 Check My Fit'
+  }
+}
+
+function showCandidateResult(c) {
+  hide('candidate-view')
+  show('candidate-result-view')
+  show('back-btn')
+
+  const color = REC_COLORS[c.recommendation] || '#7c6aff'
+  const initials = c.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
+
+  document.getElementById('c-result-card').innerHTML = `
+    <div class="rank-badge">#1</div>
+    <div class="candidate-header">
+      <div class="avatar" style="background:${color}22;border:1.5px solid ${color};color:${color}">${initials}</div>
+      <div>
+        <div class="candidate-name">${c.name}</div>
+        <div class="candidate-file">${candidateResume.name}</div>
+      </div>
+    </div>
+    <div class="score-section">
+      <div class="score-header">
+        <span class="score-label">Overall Match</span>
+        <span class="score-number" style="color:${color}">${c.overall_score}%</span>
+      </div>
+      <div class="score-bar">
+        <div class="score-fill" style="width:${c.overall_score}%;background:linear-gradient(90deg,${color}88,${color})"></div>
+      </div>
+    </div>
+    <div class="breakdown-grid">
+      <div class="breakdown-box"><div class="breakdown-key">Experience</div><div class="breakdown-val">${c.breakdown.experience}</div></div>
+      <div class="breakdown-box"><div class="breakdown-key">Skills</div><div class="breakdown-val">${c.breakdown.skills}</div></div>
+      <div class="breakdown-box"><div class="breakdown-key">Education</div><div class="breakdown-val">${c.breakdown.education}</div></div>
+      <div class="breakdown-box"><div class="breakdown-key">Leadership</div><div class="breakdown-val">${c.breakdown.leadership}</div></div>
+    </div>
+    <p class="summary-text">${c.summary}</p>
+    <div class="skills-row">${(c.top_skills||[]).map(s=>`<span class="skill-tag">${s}</span>`).join('')}</div>
+    <div class="sg-grid">
+      <div>
+        <p class="sg-title" style="color:#4ade80">✅ STRENGTHS</p>
+        ${(c.strengths||[]).map(s=>`<p class="sg-item">↑ ${s}</p>`).join('')}
+      </div>
+      <div>
+        <p class="sg-title" style="color:#ff6a6a">📌 ADD TO RESUME</p>
+        ${(c.gaps||[]).map(g=>`<p class="sg-item">↓ ${g}</p>`).join('')}
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="rec-tag" style="color:${color};background:${color}20;border-color:${color}55">${c.recommendation}</span>
+      <span class="meta-text">${c.years_experience}y exp · ${c.education}</span>
     </div>
   `
 }
