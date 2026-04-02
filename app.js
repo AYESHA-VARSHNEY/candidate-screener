@@ -201,9 +201,9 @@ const res = await fetch('https://api.anthropic.com/v1/messages', {
     'anthropic-dangerous-direct-browser-access': 'true'
   },
   body: JSON.stringify({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 4000,
-    messages: [{ role: 'user', content: prompt }]
+    job_description: jd,
+    resumes: state.resumes,
+    weights: state.weights
   })
 })
 
