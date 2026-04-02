@@ -462,6 +462,7 @@ async function handleCandidateCheck() {
 
   if (!jd) { errEl.textContent = 'Please paste a job description.'; return }
   if (!candidateResume) { errEl.textContent = 'Please upload your resume.'; return }
+  if (!candidateResume) { errEl.textContent = 'Please upload your resume.'; return }
 
   const btn = document.getElementById('c-check-btn')
   btn.disabled = true
@@ -491,27 +492,24 @@ Return ONLY valid JSON:
   "bias_flags": []
 }`
 
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch(`${API}/api/screen`,{
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': USER_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
+      headers: {'Content-Type': 'application/json',},
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 2000,
-        messages: [{ role: 'user', content: prompt }]
+        job_description: jd,
+        resumes: [candidateResume], // Backend expects a list
+        weights: state.weights,
+        api_key: USER_API_KEY
       })
-    })
+    });
 
-    const apiData = await res.json()
-    if (!res.ok) throw new Error(apiData.error?.message || 'API error')
-    const raw = apiData.content[0].text.trim().replace(/```json|```/g, '').trim()
-    const c = JSON.parse(raw)
-    showCandidateResult(c)
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.detail || 'Analysis failed');
+    // IMPORTANT: Hamara backend "candidates" array bhejta hai
+    // Hum pehle candidate ka result dikhayenge
+    showCandidateResult(data.candidates[0]);
   } catch (err) {
+    console.error(err);
     errEl.textContent = err.message || 'Something went wrong.'
   } finally {
     btn.disabled = false
