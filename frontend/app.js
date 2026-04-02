@@ -275,7 +275,7 @@ async function handleCandidateCheck() {
     btn.innerHTML = '<span class="spinner"></span> Checking your fit...'
   
     try {
-      const res = await fetch(`${API}/api/screen`, {
+        const res = await fetch(`${API}/api/screen`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
