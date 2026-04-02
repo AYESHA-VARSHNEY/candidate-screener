@@ -59,6 +59,26 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('jd-input').value = await file.text()
     }
   })
+  // Candidate JD file upload
+  document.getElementById('c-jd-file-input')?.addEventListener('change', async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+  
+    if (file.name.endsWith('.pdf')) {
+      const formData = new FormData()
+      formData.append('file', file)
+  
+      const res = await fetch(`${API}/api/parse-pdf`, {
+        method: 'POST',
+        body: formData
+      })
+  
+      const data = await res.json()
+      document.getElementById('c-jd-input').value = data.text
+    } else {
+      document.getElementById('c-jd-input').value = await file.text()
+    }
+})
 })
 
 
