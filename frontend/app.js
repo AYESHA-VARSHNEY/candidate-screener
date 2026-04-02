@@ -235,7 +235,7 @@ async function handleScreen() {
 Recommendation must be one of: "Strong Yes", "Yes", "Maybe", "No".
 Return ONLY valid JSON. No markdown. No text outside JSON.`
 
-const res = await fetch('${API}/api/screen`', {
+const res = await fetch(`${API}/api/screen`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -261,6 +261,43 @@ showResultsView();
   }
 }
 
+async function handleCandidateCheck() {
+    const jd = document.getElementById('c-jd-input').value.trim()
+    const errEl = document.getElementById('c-error-msg')
+    errEl.textContent = ''
+  
+    if (!jd) { errEl.textContent = 'Please paste a job description.'; return }
+    if (!candidateResume) { errEl.textContent = 'Please upload your resume.'; return }
+    if (!USER_API_KEY) { errEl.textContent = 'Please enter your Groq API key first.'; return; }
+  
+    const btn = document.getElementById('c-check-btn')
+    btn.disabled = true
+    btn.innerHTML = '<span class="spinner"></span> Checking your fit...'
+  
+    try {
+      const res = await fetch(`${API}/api/screen`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          job_description: jd,
+          resumes: [candidateResume],
+          weights: state.weights,
+          api_key: USER_API_KEY
+        })
+      });
+  
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Analysis failed');
+      showCandidateResult(data.candidates[0]);
+    } catch (err) {
+      errEl.textContent = err.message || 'Something went wrong.'
+    } finally {
+      btn.disabled = false
+      btn.innerHTML = '🎯 Check My Fit'
+    }
+  }
+
+// ── Reranking & Results ────
 async function rerankLive() {
     if (!state.result) return
     // Re-rank locally — no API call needed
