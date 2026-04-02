@@ -4,11 +4,9 @@ let USER_API_KEY = ''
 
 function saveApiKey() {
   const key = document.getElementById('api-key-input').value.trim()
-  if (!key.startsWith('sk-ant')) {
-    alert('Invalid API key — should start with sk-ant-')
-    return
-  }
+  if (!key) { alert('Please enter your API key'); return }
   USER_API_KEY = key
+  sessionStorage.setItem('screeniq_key', key)
   hide('api-key-view')
   show('landing-view')
 }
@@ -29,8 +27,16 @@ let state = {
 // ── Init ──────────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
-  show('api-key-view')
-  hide('landing-view')
+    // Check if API key already saved
+    const savedKey = sessionStorage.getItem('screeniq_key')
+    if (savedKey) {
+        USER_API_KEY = savedKey
+        hide('api-key-view')
+        show('landing-view')
+    } else {
+        show('api-key-view')
+        hide('landing-view')
+    }
   setupSliders()
   document.getElementById('file-input').addEventListener('change', handleFileUpload)
   document.getElementById('screen-btn').addEventListener('click', handleScreen)
@@ -38,7 +44,23 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('rescore-btn').addEventListener('click', handleScreen)
   document.getElementById('c-file-input').addEventListener('change', handleCandidateUpload)
   document.getElementById('c-check-btn').addEventListener('click', handleCandidateCheck)
+
+   // JD file upload
+   document.getElementById('jd-file-input')?.addEventListener('change', async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+    if (file.name.endsWith('.pdf')) {
+      const formData = new FormData()
+      formData.append('file', file)
+      const res = await fetch(`${API}/api/parse-pdf`, { method: 'POST', body: formData })
+      const data = await res.json()
+      document.getElementById('jd-input').value = data.text
+    } else {
+      document.getElementById('jd-input').value = await file.text()
+    }
+  })
 })
+
 
 // ── Mode Selection ────────────────────────────────────────────────────────────
 
