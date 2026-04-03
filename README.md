@@ -2,9 +2,8 @@
 
 ScreenIQ is a next-generation, privacy-first AI candidate screening tool. Instantly analyze resumes and job descriptions using leading-edge LLMs (Groq, OpenAI, Gemini, Anthropic) — all without sensitive candidate data ever leaving the browser or your control.
 
----
 
-## 🚀 Overview
+## Overview
 Live Demo: https://candidate-screener-delta.vercel.app
 
 
@@ -18,9 +17,9 @@ ScreenIQ empowers recruiters and candidates alike to securely and fairly evaluat
 - **No Resume Inflation:** Our logic enforces no “fluffy” matches and discourages AI hallucinations.
 - **Zero Trust:** LLM-calculated scores are double-checked/validated server-side for accuracy.
 
----
 
-## 🛠 Tech Stack
+
+## Tech Stack
 
 - **Backend:** FastAPI (Python), served over Vercel or your own infrastructure.
 - **Frontend:** Vanilla JS, modern UI.
@@ -29,9 +28,8 @@ ScreenIQ empowers recruiters and candidates alike to securely and fairly evaluat
 - **API Key Management:** 100% client-side (sessionStorage).
 - **Other:** pydantic, python-dotenv, CORS, dotenv, python-multipart.
 
----
 
-## ⚙️ Setup Instructions
+## Setup Instructions
 
 ### 1. **Clone & Install Backend**
 
@@ -58,9 +56,8 @@ No build step! Static files are in `candidate screener/frontend/`. Open `index.h
 
 > **Tip:** To use a provider, generate your own API key (we never store it — keys are saved only in your browser’s sessionStorage).
 
----
 
-## 🌐 Usage
+## Usage
 
 1. **Upload Resumes & Job Description**
    - For recruiters: Drag & drop multiple resumes, paste the JD.
@@ -73,45 +70,40 @@ No build step! Static files are in `candidate screener/frontend/`. Open `index.h
 3. **Review Results**
    - Get structured breakdowns: scores, summary, strengths, gaps, recommendations, bias audit.
 
----
 
-### 📸 App Preview
+### App Preview
 
 **1. Modern Dashboard**
-![ScreenIQ Landing Page](./screenshots/The Landing Page.png)
+![ScreenIQ Landing Page](./screenshots/The_Landing_Page.png)
 
 **2. Multi-LLM Provider Settings**
-![Settings Modal](./screenshots/Multi-LLM Settings.png)
+![Settings Modal](./screenshots/Multi_LLM_Settings.png)
 
 **3. Detailed AI Analysis & Scoring**
-![Analysis Result](./screenshots/Result Card.png)
+![Analysis Result](./screenshots/Result_Card.png)
 
----
 
-## 🔐 Privacy-First Philosophy
+## Privacy-First Philosophy
 
 - **API keys**: stored only in the browser _(sessionStorage)_. Never sent to us, ever.
 - **PDF/Resume parsing**: happens on your device or through ephemeral serverless endpoints (auto deletion).
 - **Scoring logic**: every candidate’s scores are double-checked, and bias audits are exposed by default.
 
----
 
-## 🧩 Extensibility
+## Extensibility
 
 - **Add your own provider**: See `backend/main.py` for LLM integration logic.
 - **Customize scoring**: Adjust `WeightConfig` via the frontend or tweak logic server-side.
 - **Integrate with ATS/HRIS**: Simple RESTful endpoints (see `/api/screen`, `/api/rerank`, `/api/parse-pdf`).
 
----
 
-## 🤝 Contributions
+## Contributions
 
 PRs, issue submissions, and feature ideas welcome! Our system is built for transparency — if you spot bias or want new features, open an issue.
 
----
 
-## 📄 License
+## License
 
 [MIT License](./LICENSE)
 
----
+
