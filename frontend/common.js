@@ -1,4 +1,4 @@
-const API = 'http://localhost:8001'
+const API = 'https://screeniq-api.onrender.com'
 
 // ── Provider Config ─────────────────────────────────────────────────────────
 const PROVIDER_INFO = {
