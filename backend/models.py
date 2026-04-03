@@ -15,7 +15,8 @@ class ScreenRequest(BaseModel):
     job_description: str
     resumes: List[ResumeInput]
     weights: WeightConfig
-    api_key: str  
+    api_key: str
+    provider: str = "groq"
 
 class ScoreBreakdown(BaseModel):
     experience: int

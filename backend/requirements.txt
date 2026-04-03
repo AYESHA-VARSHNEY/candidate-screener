@@ -6,3 +6,5 @@ python-multipart
 PyPDF2
 pydantic
 google-generativeai
+openai
+anthropic
