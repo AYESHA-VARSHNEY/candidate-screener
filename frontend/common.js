@@ -217,7 +217,7 @@ function buildCard(c, rank) {
 
       <div class="card-footer">
         <span class="rec-tag" style="color:${color};background:${color}20;border-color:${color}55">${c.recommendation}</span>
-        <span class="meta-text">${c.education}</span>
+        <span class="meta-text">${c.years_experience}y exp · ${c.education}</span>
       </div>
 
       ${biasHtml}
