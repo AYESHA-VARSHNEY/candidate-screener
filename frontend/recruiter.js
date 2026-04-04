@@ -47,11 +47,13 @@ function syncResultSliders() {
     if (!slider) return
     slider.value = state.weights[key]
     valEl.textContent = state.weights[key]
+    document.getElementById(`rval-${key}`).textContent = state.weights[key]
     
     const fresh = slider.cloneNode(true)
-    slider.parentNode.replaceChild(fresher, slider)
+    slider.parentNode.replaceChild(fresh, slider)
     fresh.addEventListener('input', () => {
       state.weights[key] = parseInt(fresh.value)
+      document.getElementById(`rval-${key}`).textContent = fresh.value
       valEl.textContent = fresh.value
       rerankLive()
     })
