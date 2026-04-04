@@ -34,7 +34,7 @@ ScreenIQ empowers recruiters and candidates alike to securely and fairly evaluat
 ### 1. **Clone & Install Backend**
 
 ```bash
-git clone https://github.com/YOUR_ORG/screeniq.git
+git clone git clone https://github.com/AYESHA-VARSHNEY/candidate-screener.git
 cd screeniq/candidate screener/backend
 python -m venv venv
 source venv/bin/activate
