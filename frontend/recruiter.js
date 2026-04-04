@@ -134,13 +134,20 @@ function rerankLive() {
   if (!state.result) return
   const w = state.weights
   const total = w.experience + w.skills + w.education + w.leadership || 1
-  state.result.candidates.sort((a, b) => {
-    const scoreA = (a.breakdown.experience * w.experience + a.breakdown.skills * w.skills +
-                    a.breakdown.education * w.education + a.breakdown.leadership * w.leadership) / total
-    const scoreB = (b.breakdown.experience * w.experience + b.breakdown.skills * w.skills +
-                    b.breakdown.education * w.education + b.breakdown.leadership * w.leadership) / total
-    return scoreB - scoreA
+  state.result.candidates.forEach(c => {
+    const newScore = Math.round(
+      (c.breakdown.experience * w.experience +
+       c.breakdown.skills * w.skills +
+       c.breakdown.education * w.education +
+       c.breakdown.leadership * w.leadership) / total
+    )
+    c.overall_score = newScore
+    if (newScore >= 80) c.recommendation = 'Strong Yes'
+    else if (newScore >= 65) c.recommendation = 'Yes'
+    else if (newScore >= 45) c.recommendation = 'Maybe'
+    else c.recommendation = 'No'
   })
+  state.result.candidates.sort((a, b) => b.overall_score - a.overall_score)
   renderCards()
   renderSummary()
 }
