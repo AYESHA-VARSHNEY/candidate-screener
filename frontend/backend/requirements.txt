@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+groq
+python-dotenv
+python-multipart
+PyPDF2
+pydantic
+google-generativeai
+openai
+anthropic
