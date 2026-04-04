@@ -34,8 +34,7 @@ function setupSliders() {
     slider.addEventListener('input', () => {
       state.weights[key] = parseInt(slider.value)
       valEl.textContent = slider.value
-      syncResultSliders()
-      if (state.result) rerankLive()
+      rerankLive()
     })
   })
 }
@@ -50,7 +49,7 @@ function syncResultSliders() {
     valEl.textContent = state.weights[key]
     
     const fresh = slider.cloneNode(true)
-    slider.parentNode.replaceChild(old, slider)
+    slider.parentNode.replaceChild(fresher, slider)
     fresh.addEventListener('input', () => {
       state.weights[key] = parseInt(fresh.value)
       valEl.textContent = fresh.value
