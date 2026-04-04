@@ -102,8 +102,5 @@ No build step! Static files are in `candidate screener/frontend/`. Open `index.h
 PRs, issue submissions, and feature ideas welcome! Our system is built for transparency — if you spot bias or want new features, open an issue.
 
 
-## License
-
-[MIT License](./LICENSE)
 
 
