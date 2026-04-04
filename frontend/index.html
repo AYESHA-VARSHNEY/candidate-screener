@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Recruiter — ScreenIQ</title>
+  <title>ScreenIQ — AI Candidate Screener</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -11,123 +11,30 @@
 <nav class="navbar" id="navbar"></nav>
 
 <main class="main">
-
-  <!-- UPLOAD VIEW -->
-  <div id="upload-view" class="upload-grid">
-
-    <!-- Left: JD -->
-    <div class="panel">
-      <h2>Job Description</h2>
-      <label style="display:inline-flex;align-items:center;gap:6px;margin-bottom:8px;cursor:pointer;color:var(--muted);font-size:12px;border:1px solid var(--border);padding:4px 10px;border-radius:6px">
-        <input type="file" id="jd-file-input" accept=".pdf,.txt" style="display:none" />
-        Upload JD file (.pdf / .txt)
-      </label>
-      <textarea id="jd-input" placeholder="Paste the job description here..."></textarea>
+  <div class="landing-hero">
+    <div>
+      <h1 class="landing-title">Screen<span>IQ</span></h1>
+      <p class="landing-subtitle">AI-Powered Candidate Screening</p>
     </div>
 
-    <!-- Right: Resumes + Weights + CTA -->
-    <div class="right-panels">
+    <p style="color:var(--muted);font-size:15px">Who are you today?</p>
 
-      <div class="panel">
-        <h2>Resumes (<span id="resume-count">0</span> uploaded)</h2>
-        <label class="upload-zone">
-          <input type="file" id="file-input" multiple accept=".txt,.pdf,.md" style="display:none" />
-          <div class="upload-icon">📄</div>
-          Drop .txt / .pdf resumes here or click to browse
-        </label>
-        <div class="file-list" id="file-list"></div>
-      </div>
+    <div class="mode-cards">
+      <a href="recruiter.html" class="mode-card">
+        <div class="mode-card-icon">🏢</div>
+        <div class="mode-card-title">Recruiter</div>
+        <div class="mode-card-desc">Screen multiple candidates against a job description</div>
+      </a>
 
-      <div class="panel">
-        <h2>Scoring Weights</h2>
-        <div class="slider-row">
-          <div class="slider-label">
-            <span style="color:#7c6aff">Experience</span>
-            <span class="slider-val mono" id="val-experience">40</span>
-          </div>
-          <input type="range" id="slider-experience" min="0" max="100" step="5" style="accent-color:#7c6aff" />
-        </div>
-        <div class="slider-row">
-          <div class="slider-label">
-            <span style="color:#4ade80">Skills Match</span>
-            <span class="slider-val mono" id="val-skills">35</span>
-          </div>
-          <input type="range" id="slider-skills" min="0" max="100" step="5" style="accent-color:#4ade80" />
-        </div>
-        <div class="slider-row">
-          <div class="slider-label">
-            <span style="color:#facc15">Education</span>
-            <span class="slider-val mono" id="val-education">15</span>
-          </div>
-          <input type="range" id="slider-education" min="0" max="100" step="5" style="accent-color:#facc15" />
-        </div>
-        <div class="slider-row">
-          <div class="slider-label">
-            <span style="color:#ff6a6a">Leadership</span>
-            <span class="slider-val mono" id="val-leadership">10</span>
-          </div>
-          <input type="range" id="slider-leadership" min="0" max="100" step="5" style="accent-color:#ff6a6a" />
-        </div>
-      </div>
-
-      <p class="error-msg" id="error-msg"></p>
-      <button class="btn-primary" id="screen-btn">Screen Candidates</button>
+      <a href="candidate.html" class="mode-card green">
+        <div class="mode-card-icon">👤</div>
+        <div class="mode-card-title">Candidate</div>
+        <div class="mode-card-desc">Check how well your resume matches a job</div>
+      </a>
     </div>
   </div>
-
-  <!-- RESULTS VIEW -->
-  <div id="results-view" class="results-grid hidden">
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <div style="margin-bottom:20px">
-        <div class="stat-label">SCREENED</div>
-        <div class="stat-big" id="total-count">0 candidates</div>
-      </div>
-
-      <div class="rec-grid" id="rec-summary"></div>
-
-      <h3 style="font-size:13px;font-weight:700;margin-bottom:12px">Adjust Weights</h3>
-
-      <div class="slider-row">
-        <div class="slider-label">
-          <span style="color:#7c6aff">Experience</span>
-          <span class="slider-val mono" id="rval-experience">40</span>
-        </div>
-        <input type="range" id="rslider-experience" min="0" max="100" step="5" style="accent-color:#7c6aff" />
-      </div>
-      <div class="slider-row">
-        <div class="slider-label">
-          <span style="color:#4ade80">Skills</span>
-          <span class="slider-val mono" id="rval-skills">35</span>
-        </div>
-        <input type="range" id="rslider-skills" min="0" max="100" step="5" style="accent-color:#4ade80" />
-      </div>
-      <div class="slider-row">
-        <div class="slider-label">
-          <span style="color:#facc15">Education</span>
-          <span class="slider-val mono" id="rval-education">15</span>
-        </div>
-        <input type="range" id="rslider-education" min="0" max="100" step="5" style="accent-color:#facc15" />
-      </div>
-      <div class="slider-row">
-        <div class="slider-label">
-          <span style="color:#ff6a6a">Leadership</span>
-          <span class="slider-val mono" id="rval-leadership">10</span>
-        </div>
-        <input type="range" id="rslider-leadership" min="0" max="100" step="5" style="accent-color:#ff6a6a" />
-      </div>
-
-      <button class="btn-secondary" style="width:100%;margin-top:16px" onclick="showUploadView()">New Screening</button>
-    </div>
-
-    <!-- Cards -->
-    <div class="cards-list" id="cards-list"></div>
-  </div>
-
 </main>
 
 <script src="common.js"></script>
-<script src="recruiter.js"></script>
 </body>
 </html>
