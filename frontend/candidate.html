@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Candidate — ScreenIQ</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="navbar" id="navbar"></nav>
+
+<main class="main">
+
+  <!-- UPLOAD VIEW -->
+  <div id="candidate-upload" class="upload-grid">
+    <div class="panel">
+      <h2>Job Description</h2>
+      <label style="display:inline-flex;align-items:center;gap:6px;margin-bottom:8px;cursor:pointer;color:var(--muted);font-size:12px;border:1px solid var(--border);padding:4px 10px;border-radius:6px">
+        <input type="file" id="c-jd-file-input" accept=".pdf,.txt" style="display:none" />
+        Upload JD file (.pdf / .txt)
+      </label>
+      <textarea id="c-jd-input" placeholder="Paste the job description you want to apply for..."></textarea>
+    </div>
+
+    <div class="right-panels">
+      <div class="panel">
+        <h2>Your Resume</h2>
+        <label class="upload-zone">
+          <input type="file" id="c-file-input" accept=".txt,.pdf" style="display:none" />
+          <div class="upload-icon">📄</div>
+          Upload your resume (.pdf or .txt)
+        </label>
+        <div class="file-list" id="c-file-list"></div>
+      </div>
+      <p class="error-msg" id="c-error-msg"></p>
+      <button class="btn-primary" id="c-check-btn" style="background:#4ade80;color:#000">Check My Fit</button>
+    </div>
+  </div>
+
+  <!-- RESULT VIEW -->
+  <div id="candidate-result" class="hidden" style="max-width:700px;margin:0 auto">
+    <div class="candidate-card" id="c-result-card"></div>
+    <button class="btn-secondary" style="width:100%;margin-top:16px" onclick="showCandidateUpload()">Try Another</button>
+  </div>
+
+</main>
+
+<script src="common.js"></script>
+<script src="candidate.js"></script>
+</body>
+</html>
