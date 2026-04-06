@@ -80,7 +80,19 @@ No build step! Static files are in `candidate screener/frontend/`. Open `index.h
 ![Settings Modal](./screenshots/Multi_LLM_Settings.png)
 
 **3. Detailed AI Analysis & Scoring**
-![Analysis Result](./screenshots/Result_Card.png)
+![Analysis Result of candidate](./screenshots/Result_Card.png)
+
+## Recruiter Mode - Dynamic Re-ranking
+ScreenIQ allows recruiters to adjust weights and see the talent pool re-rank instantly without extra API calls.
+
+### 1. Balanced View
+![Balanced Weights](./screenshots/recruiter_balanced_view.png)
+
+### 2. Skill-Based Priority (Aman Gupta #1)
+![Skills Priority](./screenshots/recruiter_skills_priority.png)
+
+### 3. Leadership-Based Priority (Ishita Verma #1)
+![Leadership Priority](./screenshots/recruiter_leadership_switch.png)
 
 
 ## Privacy-First Philosophy
